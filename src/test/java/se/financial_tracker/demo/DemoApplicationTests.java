@@ -1,4 +1,4 @@
-package se.financial_tracking.demo;
+package se.financial_tracker.demo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

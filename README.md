@@ -1,1 +1,1 @@
-# financial-tracking
+# financial-tracker
