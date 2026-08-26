@@ -39,12 +39,13 @@ An ArchUnit test fails the build if any `jakarta.persistence` type is referenced
 
 ## Consequences
 
-- Every aggregate has a twin: a domain class and a JPA entity, plus a mapper and its tests.
-  This is the accepted cost, and the main argument the next contributor will make against
-  this decision.
+- Every aggregate has a twin: a domain class and a JPA entity, plus a mapper and its
+  tests. This is the accepted cost, and the main argument the next contributor will make
+  against this decision.
 - The domain is unit-testable with `new` and plain JUnit, with no database and no context.
 - The database schema can change shape without the domain noticing, and vice versa.
 - Mappers need the reconstitution path described in
   [ADR-0003](0003-split-aggregate-creation-into-create-and-hydrate.md).
-- Some JPA conveniences are unavailable: no dirty checking on domain objects, so a use case
-  must explicitly save what it changed. That explicitness is considered a benefit.
+- Some JPA conveniences are unavailable: no dirty checking on domain objects, so a use
+  case must explicitly save what it changed. That explicitness is considered a benefit.
+

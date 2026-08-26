@@ -6,18 +6,18 @@ last-updated: 2026-08-21
 
 # Requirements
 
-Source of truth for what the application must do. Requirements are numbered so that
-code, tests, issues and discussions can reference them (`FR-3.2`, `NFR-4`).
+Source of truth for what the application must do. Requirements are numbered so that code,
+tests, issues and discussions can reference them (`FR-3.2`, `NFR-4`).
 
 Terms used here are defined in [glossary.md](glossary.md).
 
 ## 1. Actors
 
-| Actor | Description |
-|---|---|
-| **User** | A registered person who tracks their own accounts, transactions and goals. |
-| **Group member** | A user who has joined a group. Every group member is a user. |
-| **Group owner** | The user who created a group; can invite, remove members and delete the group. |
+|      Actor       |                                  Description                                   |
+|------------------|--------------------------------------------------------------------------------|
+| **User**         | A registered person who tracks their own accounts, transactions and goals.     |
+| **Group member** | A user who has joined a group. Every group member is a user.                   |
+| **Group owner**  | The user who created a group; can invite, remove members and delete the group. |
 
 There is no administrator role in the first version.
 
@@ -44,8 +44,8 @@ and they are tracked differently.
 A **transaction** is money the user moved *into* or *out of* an account. It is a fact the
 user knows exactly.
 
-- **FR-3.6** A user can record a transaction on any account with: date, amount,
-  direction (`DEPOSIT` or `WITHDRAWAL`), and an optional note.
+- **FR-3.6** A user can record a transaction on any account with: date, amount, direction
+  (`DEPOSIT` or `WITHDRAWAL`), and an optional note.
 - **FR-3.7** A user can edit and delete their own transactions.
 - **FR-3.8** For a `SAVINGS` account, the **balance** is derived as the sum of deposits
   minus withdrawals up to a given date. It is never entered directly.
@@ -67,27 +67,27 @@ moment. Its value moves with the market, so it cannot be derived from transactio
 - **FR-3.13** Valuations and transactions are stored and displayed separately. A deposit
   never changes a valuation, and a valuation never implies a transaction.
 - **FR-3.14** For an investment account, the system derives **net contributions**
-  (deposits − withdrawals) and **return** (current value − net contributions) for a
-  chosen period.
+  (deposits − withdrawals) and **return** (current value − net contributions) for a chosen
+  period.
 - **FR-3.15** `SAVINGS` accounts do not accept valuations.
 
-> *Why the split:* if a portfolio is worth 105 000 after the user deposited 100 000, the
-> 5 000 is market movement, not something the user did. Deriving one number from the
-> other would make it impossible to tell contribution from performance — the single most
-> useful thing this application can show.
+> *Why the split:* if a portfolio is worth 105 000 after the user deposited 100 000, the 5
+> 000 is market movement, not something the user did. Deriving one number from the other
+> would make it impossible to tell contribution from performance — the single most useful
+> thing this application can show.
 
 ## 4. Goals
 
-The first version supports one goal type: the **recurring contribution goal** —
-"put aside X per period".
+The first version supports one goal type: the **recurring contribution goal** — "put aside
+X per period".
 
-- **FR-4.1** A user can create a goal with: name, target amount, period (`MONTHLY`),
-  start date, and an optional end date.
+- **FR-4.1** A user can create a goal with: name, target amount, period (`MONTHLY`), start
+  date, and an optional end date.
 - **FR-4.2** A goal is linked to one or more of the owner's financial accounts. Only
   deposits to those accounts count toward it.
 - **FR-4.3** For each period, the system computes **contributed** (sum of deposits in that
-  period on the linked accounts), and marks the period as met or missed against the
-  target amount.
+  period on the linked accounts), and marks the period as met or missed against the target
+  amount.
 - **FR-4.4** A user can see, for a goal: the current period's progress, and a history of
   met/missed periods.
 - **FR-4.5** Withdrawals in a period reduce that period's contributed amount.
@@ -126,8 +126,8 @@ deliberately deferred; see [§8](#8-out-of-scope-for-the-first-version).
 
 ## 7. Non-functional requirements
 
-- **NFR-1 Informational only.** No payment, transfer or banking integration exists or
-  will be added. All data is entered manually by users.
+- **NFR-1 Informational only.** No payment, transfer or banking integration exists or will
+  be added. All data is entered manually by users.
 - **NFR-2 Privacy by default.** Data is private to its owner, except where a group
   membership explicitly opens it (FR-5.6). No sharing mechanism outside groups.
 - **NFR-3 Correctness of money.** Monetary amounts use `BigDecimal` with an explicit
@@ -159,3 +159,4 @@ deliberately deferred; see [§8](#8-out-of-scope-for-the-first-version).
    transactions, or only the aggregate contribution?
 3. Is a period strictly a calendar month, or a rolling period from the goal start date?
 4. Should archived accounts still count toward dashboard totals?
+

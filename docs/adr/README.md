@@ -14,16 +14,20 @@ available for anyone — human or AI — who asks "why is it like this?".
 
 Copy [0000-template.md](0000-template.md) to start one.
 
-| # | Decision | Status |
-|---|---|---|
-| [0001](0001-hexagonal-architecture-with-use-case-slices.md) | Hexagonal architecture with use-case slices | Accepted |
-| [0002](0002-domain-free-of-jpa-annotations.md) | The domain stays free of JPA annotations | Accepted |
-| [0003](0003-split-aggregate-creation-into-create-and-hydrate.md) | Split aggregate creation into `create` and `hydrate` | Accepted |
+|                                 #                                 |                       Decision                       |  Status  |
+|-------------------------------------------------------------------|------------------------------------------------------|----------|
+| [0001](0001-hexagonal-architecture-with-use-case-slices.md)       | Hexagonal architecture with use-case slices          | Accepted |
+| [0002](0002-domain-free-of-jpa-annotations.md)                    | The domain stays free of JPA annotations             | Accepted |
+| [0003](0003-split-aggregate-creation-into-create-and-hydrate.md)  | Split aggregate creation into `create` and `hydrate` | Accepted |
+| [0004](0004-command-and-query-handlers-behind-inbound-ports.md)   | Command and query handlers behind inbound ports      | Accepted |
+| [0005](0005-adapters-as-separate-maven-modules.md)                | Adapters live in separate Maven modules              | Accepted |
+| [0006](0006-formatting-with-spotless-and-palantir-java-format.md) | Formatting with Spotless and palantir-java-format    | Accepted |
 
 ## Postponed
 
 Decisions we have consciously deferred, so nobody quietly makes them in a pull request:
 
-| Question | Why postponed |
-|---|---|
-| How use case beans are wired (`@Configuration` factories vs `@Component`) | Not enough experience with the trade-off yet; revisit after the first few slices exist |
+|                                 Question                                 |                Why postponed                 |            Decide by             |
+|--------------------------------------------------------------------------|----------------------------------------------|----------------------------------|
+| How handler beans are wired (`@Configuration` factories vs `@Component`) | Not enough experience with the trade-off yet | After the first few slices exist |
+

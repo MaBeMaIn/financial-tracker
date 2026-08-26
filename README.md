@@ -1,11 +1,11 @@
 # financial-tracker
 
 A collaborative, **informational** financial tracking application. Users register their
-own savings accounts, deposits and withdrawals, and portfolio valuations, follow
-savings goals, and form groups around shared goals.
+own savings accounts, deposits and withdrawals, and portfolio valuations, follow savings
+goals, and form groups around shared goals.
 
-No money is handled or moved by this application — all figures are entered manually
-by users.
+No money is handled or moved by this application — all figures are entered manually by
+users.
 
 ## Status
 
@@ -25,8 +25,8 @@ The development database is in-memory H2; schema is managed by Flyway.
 
 ## Documentation
 
-Start at [docs/README.md](docs/README.md). AI tools should read
-[AGENTS.md](AGENTS.md) first.
+Start at [docs/README.md](docs/README.md). AI tools should read [AGENTS.md](AGENTS.md)
+first.
 
 ## Contributing
 
@@ -38,3 +38,4 @@ Read these before your first change:
    — hexagonal architecture, DDD, SOLID and use-case slicing, with a worked example.
 3. [docs/guidelines/git-workflow.md](docs/guidelines/git-workflow.md) — branches, commits
    and the pull request checklist.
+

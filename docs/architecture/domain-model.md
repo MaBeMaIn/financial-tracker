@@ -124,18 +124,19 @@ factories (`create`), never validated after the fact; see
 
 None of these are stored.
 
-| Value | Applies to | Rule |
-|---|---|---|
-| **Balance** | Savings account | Σ deposits − Σ withdrawals with `occurred_on <= date` |
-| **Current value** | Investment account | `total_value` of the valuation with the greatest `valued_on <= date`; *unknown* if none |
-| **Net contributions** | Any account | Σ deposits − Σ withdrawals within the period |
-| **Return** | Investment account | current value − net contributions since the account's start |
-| **Contributed** | Goal, per period | Σ deposits − Σ withdrawals on linked accounts within the period |
-| **Period met** | Goal, per period | contributed ≥ `target_amount` |
-| **Shared goal progress** | Group goal, per period | Σ contributed across all linked accounts of all members |
+|          Value           |       Applies to       |                                          Rule                                           |
+|--------------------------|------------------------|-----------------------------------------------------------------------------------------|
+| **Balance**              | Savings account        | Σ deposits − Σ withdrawals with `occurred_on <= date`                                   |
+| **Current value**        | Investment account     | `total_value` of the valuation with the greatest `valued_on <= date`; *unknown* if none |
+| **Net contributions**    | Any account            | Σ deposits − Σ withdrawals within the period                                            |
+| **Return**               | Investment account     | current value − net contributions since the account's start                             |
+| **Contributed**          | Goal, per period       | Σ deposits − Σ withdrawals on linked accounts within the period                         |
+| **Period met**           | Goal, per period       | contributed ≥ `target_amount`                                                           |
+| **Shared goal progress** | Group goal, per period | Σ contributed across all linked accounts of all members                                 |
 
 ## Deliberate omissions
 
 - No holdings, instruments or prices inside an investment account — only total value.
 - No currency conversion, and therefore no exchange-rate entity.
 - No audit log beyond the entities themselves in v1.
+

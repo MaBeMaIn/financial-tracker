@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>se.financial-tracker</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>financial-tracker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name/>
 	<description/>
@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>26</java.version>
+		<spotless.version>3.10.0</spotless.version>
+		<palantir-java-format.version>2.96.0</palantir-java-format.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,6 +55,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa-test</artifactId>
 			<scope>test</scope>
@@ -74,6 +81,50 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless.version}</version>
+				<configuration>
+					<java>
+						<palantirJavaFormat>
+							<version>${palantir-java-format.version}</version>
+							<style>PALANTIR</style>
+							<!-- javadoc in this repo contains hand-laid-out <pre>{@code} blocks -->
+							<formatJavadoc>false</formatJavadoc>
+						</palantirJavaFormat>
+						<removeUnusedImports/>
+						<!-- everything else, then jakarta/javax/java, then static: IntelliJ's default layout -->
+						<importOrder>
+							<order>,jakarta|javax|java,\#</order>
+						</importOrder>
+						<trimTrailingWhitespace/>
+						<endWithNewline/>
+					</java>
+					<markdown>
+						<includes>
+							<include>*.md</include>
+							<include>docs/**/*.md</include>
+						</includes>
+						<flexmark>
+							<emulationProfile>COMMONMARK</emulationProfile>
+							<extensions>YamlFrontMatter,Tables</extensions>
+							<formatterOptions>
+								<rightMargin>90</rightMargin>
+							</formatterOptions>
+						</flexmark>
+					</markdown>
+				</configuration>
+				<executions>
+					<execution>
+						<id>spotless-check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
