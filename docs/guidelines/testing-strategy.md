@@ -11,13 +11,13 @@ where tests are fastest.
 
 ## Levels
 
-| Level | What it covers | How | Speed |
-|---|---|---|---|
-| **Domain tests** | Aggregates, value objects, invariants, calculations | Plain JUnit 5, `new`, no Spring | Milliseconds — the bulk of our tests |
-| **Use case tests** | Orchestration and authorization | Use case constructed directly, outbound ports replaced by hand-written fakes | Milliseconds |
-| **Adapter tests** | Persistence mapping, HTTP contract | Spring test slices: `@DataJpaTest` with Flyway, `@WebMvcTest` with a mocked inbound port | Seconds |
-| **Architecture tests** | The dependency rule | ArchUnit, one test class in `src/test` | Milliseconds |
-| **End-to-end tests** | A few critical journeys | `@SpringBootTest` with a real HTTP call | Slow — keep to a handful |
+|         Level          |                     What it covers                      |                                                How                                                 |                Speed                 |
+|------------------------|---------------------------------------------------------|----------------------------------------------------------------------------------------------------|--------------------------------------|
+| **Domain tests**       | Aggregates, value objects, invariants, calculations     | Plain JUnit 5, `new`, no Spring                                                                    | Milliseconds — the bulk of our tests |
+| **Handler tests**      | Orchestration and authorization                         | Handler constructed directly, outbound ports replaced by hand-written fakes                        | Milliseconds                         |
+| **Adapter tests**      | Persistence mapping, HTTP contract                      | In the adapter's own module — `@DataJpaTest` with Flyway, `@WebMvcTest` with a mocked inbound port | Seconds                              |
+| **Architecture tests** | Slice isolation and the conventions the compiler misses | ArchUnit, one test class in `core`                                                                 | Milliseconds                         |
+| **End-to-end tests**   | A few critical journeys                                 | `@SpringBootTest` with a real HTTP call, in `app`                                                  | Slow — keep to a handful             |
 
 Write the test at the **lowest level that can express the rule**. A rule about withdrawals
 reducing goal progress is a domain test, not an end-to-end test.
@@ -42,14 +42,15 @@ have non-negotiable coverage including empty data and period boundaries:
 
 ## Architecture test
 
-One ArchUnit test enforces what review would otherwise have to catch every time:
+The core/adapter dependency rule is enforced by the build itself: `core` has no framework
+on its classpath ([ADR-0005](../adr/0005-adapters-as-separate-maven-modules.md)). One
+ArchUnit test in `core` covers what the compiler cannot see:
 
-- `..domain..` depends on no other project package and on no framework
-- `..application..` does not depend on `..adapter..`
-- No class in `..domain..` or `..application..` is annotated with `@Entity`,
-  `@RestController` or `@Repository`, and neither references `jakarta.persistence`
-  ([ADR-0002](../adr/0002-domain-free-of-jpa-annotations.md))
-- No slice depends on another slice's `domain`, `usecase` or `adapter` packages
+- `..domain..` depends on no other project package
+- No slice depends on another slice's `domain`, `commands` or `queries` — only on its
+  `port.in`
+- Every class in `..commands..` or `..queries..` ending in `Handler` implements an
+  interface from its slice's `port.in`
 - Only classes in `..adapter.out.persistence..` call a `hydrate` method
   ([ADR-0003](../adr/0003-split-aggregate-creation-into-create-and-hydrate.md))
 - Aggregates declare no public constructors
@@ -67,3 +68,4 @@ One ArchUnit test enforces what review would otherwise have to catch every time:
 - A bug fix starts with a failing test that reproduces it.
 - **TODO** — decide whether to enforce a coverage threshold in the build, and what to do
   about generated/DTO code if we do.
+

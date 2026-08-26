@@ -10,9 +10,9 @@ An aggregate comes into existence in two entirely different situations, which a 
 constructor cannot distinguish:
 
 1. **Something happens in the business.** A user opens an account, sets a goal, creates a
-   group. This is the moment a rule applies ("a new account may not be archived", "a goal's
-   end date must be after its start date"), an identity is assigned, and — once we add
-   them — a lifecycle event is raised.
+   group. This is the moment a rule applies ("a new account may not be archived", "a
+   goal's end date must be after its start date"), an identity is assigned, and — once we
+   add them — a lifecycle event is raised.
 2. **We read stored state back.** The persistence adapter rebuilds an aggregate that
    already exists. No business event is happening; it happened months ago. Re-running
    creation logic here would raise a duplicate event, reset derived state, or reject an
@@ -29,22 +29,22 @@ paths:
 - `static X create(...)` — a genuine new instance. Applies creation-time business rules,
   assigns identity, sets initial state, and is the single place a future creation event
   would be recorded.
-- `static X hydrate(...)` — reconstitution from stored state. Accepts the aggregate exactly
-  as stored, checks structural validity only (no nulls, consistent fields), records no
-  events, applies no defaults and no timestamps.
+- `static X hydrate(...)` — reconstitution from stored state. Accepts the aggregate
+  exactly as stored, checks structural validity only (no nulls, consistent fields),
+  records no events, applies no defaults and no timestamps.
 
 `hydrate` is called **only by persistence mappers**. An ArchUnit test enforces this: no
 class outside `..adapter.out.persistence..` may call a `hydrate` method. Tests build
-aggregates with `create` or a test builder that uses it; only persistence-mapping tests use
-`hydrate`.
+aggregates with `create` or a test builder that uses it; only persistence-mapping tests
+use `hydrate`.
 
 ## Alternatives considered
 
 - **A single constructor or factory for both paths** — fewer concepts. Rejected: it is
   exactly the ambiguity that makes lifecycle events, defaults and identity assignment
   unsafe to add later.
-- **A separate reconstitution class or interface per aggregate** — more explicit still, but
-  more machinery than a small project needs.
+- **A separate reconstitution class or interface per aggregate** — more explicit still,
+  but more machinery than a small project needs.
 - **Package-private `hydrate`** — would enforce the restriction by the compiler, but the
   mapper lives in the adapter package by design. ArchUnit is the trade-off.
 
@@ -60,3 +60,4 @@ aggregates with `create` or a test builder that uses it; only persistence-mappin
 - Slightly more code per aggregate, and a rule contributors will not guess on their own —
   so it is listed in `AGENTS.md` and in
   [guidelines/domain-modelling.md](../guidelines/domain-modelling.md), not only here.
+

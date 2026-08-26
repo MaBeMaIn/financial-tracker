@@ -28,8 +28,8 @@ Conventional Commits, because they are machine-readable and keep the log scannab
 <why the change was needed, if not obvious>
 ```
 
-Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `build`.
-Scope is the slice: `account`, `goal`, `group`, `user`, `docs`.
+Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `build`. Scope is the slice:
+`account`, `goal`, `group`, `user`, `docs`.
 
 ```
 feat(account): record valuations separately from transactions
@@ -43,24 +43,25 @@ Reference requirement numbers (`FR-3.10`) rather than restating the requirement.
 
 ## Pull requests
 
-Small enough to review properly — one use case or one concept.
+Small enough to review properly — one operation or one concept.
 
 Checklist for the author:
 
-- [ ] Tests at the lowest level that expresses the rule; the suite is green
-- [ ] Requirements referenced, or `docs/product/requirements.md` updated if they changed
-- [ ] Documentation updated in the same pull request when behaviour or structure changed
-- [ ] No new dependency without a note on why
-- [ ] Follows [architecture-principles.md](architecture-principles.md) — dependency rule
-      intact, no new `*Service` catch-all
-- [ ] If a non-obvious decision was made, an ADR is included
+- [] Tests at the lowest level that expresses the rule; the suite is green
+- [] Requirements referenced, or `docs/product/requirements.md` updated if they changed
+- [] Documentation updated in the same pull request when behaviour or structure changed
+- [] No new dependency without a note on why
+- [] Follows [architecture-principles.md](architecture-principles.md) — dependency rule
+  intact, no new `*Service` catch-all
+- [] If a non-obvious decision was made, an ADR is included
 
 Reviewers: at least one approval. Review for correctness, naming and whether the rule
 landed in the right place — formatting is the formatter's job.
 
 ## AI-generated changes
 
-- The author of the pull request is responsible for the code, whoever or whatever wrote it.
+- The author of the pull request is responsible for the code, whoever or whatever wrote
+  it.
 - Point the tool at [AGENTS.md](../../AGENTS.md) and the relevant docs before it starts.
 - Be sceptical of large generated diffs that touch many slices; ask for the change to be
   split.
@@ -70,3 +71,4 @@ landed in the right place — formatting is the formatter's job.
 - **TODO** — squash-merge vs merge commit
 - **TODO** — CI setup (GitHub Actions running `./mvnw verify` on every pull request)
 - **TODO** — versioning and release process, once there is something to release
+
