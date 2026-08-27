@@ -94,6 +94,8 @@ they belong in an adapter module.
 
 - Use the vocabulary in the glossary in code, tests, APIs and commit messages.
 - Reference requirement numbers (`FR-3.10`) in commits and pull requests.
+- Tests assert with **AssertJ** (`assertThat(...)`), never JUnit's `assertEquals`,
+  `assertTrue` or `assertThrows`.
 - Prefer small, single-purpose documents; if a doc passes ~200 lines, split it.
 - Diagrams are Mermaid, so they stay readable as text.
 - If a requirement is ambiguous, ask rather than inventing one; requirements live in

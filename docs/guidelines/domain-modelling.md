@@ -98,16 +98,21 @@ Value objects are immutable records with meaning and behaviour: `Money`, `Accoun
 `Period`, `DateRange`. Prefer them over bare `BigDecimal`, `UUID` and `String` — a method
 taking `(Money, AccountId)` cannot be called with the arguments swapped.
 
-## Typed string primitives
+## Typed primitives
 
-Identifiers and names are `TypedString`s, not bare `String`s, so that `transfer(UserId,
-GroupId)` cannot be called with the arguments swapped and a `Username` cannot be stored
-where an email belongs.
+Names and identifiers are never bare `String`s or `UUID`s, so that `link(UserId, GroupId)`
+cannot be called with the arguments swapped and a `Username` cannot be stored where an
+email belongs. Two bases in `common.domain` cover this:
 
-`common.domain.TypedStringBase<T>` is the shared base: it trims, rejects null and blank,
-and gives value equality that also compares the concrete class, so a `Username` never
-equals a `GroupName` holding the same text. The type parameter is the subtype itself,
-which makes each primitive `Comparable` against its own kind only.
+|         Base         | Backed by |                   Used for                   |
+|----------------------|-----------|----------------------------------------------|
+| `TypedStringBase<T>` | `String`  | names and text: `Username`, `GroupName`      |
+| `TypedUuidBase<T>`   | `UUID`    | identifiers: `UserId`, `AccountId`, `GoalId` |
+
+Both reject null (and, for strings, blank), give value equality that **also compares the
+concrete class** — so a `UserId` never equals an `AccountId` holding the same UUID — and
+take the subtype as their type parameter, which makes each primitive `Comparable` against
+its own kind only.
 
 ```java
 public final class Username extends TypedStringBase<Username> {
@@ -120,18 +125,39 @@ public final class Username extends TypedStringBase<Username> {
         return new Username(value);
     }
 }
+
+public final class UserId extends TypedUuidBase<UserId> {
+
+    private UserId(UUID value) {
+        super(value);
+    }
+
+    public static UserId newId() {          // a new identity, for User.create(...)
+        return new UserId(UUID.randomUUID());
+    }
+
+    public static UserId of(UUID value) {   // an identity that already exists
+        return new UserId(value);
+    }
+}
 ```
 
-- Subtypes are `final`, have a private constructor and a static `of(...)`.
-- There is no `of` on the base class: static methods are not polymorphic in Java, so a
-  base factory cannot know which subtype to build.
-- Normalization beyond trimming (lower-casing an email) happens in the subtype's factory
-  *before* calling the constructor; extra validation happens *after*, on the normalized
-  value. Neither belongs in an overridable method called from the constructor.
-- A `record` implementing `TypedString` would be the more idiomatic Java 26 alternative,
-  since records cannot extend a class. We chose the base class so the null/blank check,
-  equality and comparison exist once rather than in every primitive. **TODO** — record as
-  an ADR if we keep it past the first few slices.
+- Subtypes are `final`, have a private constructor and static factories.
+- There is no `of` or `newId` on either base class: static methods are not polymorphic in
+  Java, so a base factory cannot know which subtype to build.
+- `newId()` and `of(...)` are the identifier equivalent of the aggregate's `create` and
+  `hydrate` split: minting an identity is not the same act as accepting one that exists.
+- Strings are trimmed by the base. Further normalization (lower-casing an email) happens
+  in the subtype's factory *before* calling the constructor; extra validation happens
+  *after*, on the normalized value. Neither belongs in an overridable method called from a
+  constructor.
+- `TypedUuidBase.compareTo` follows `UUID.compareTo`, which compares the two 64-bit halves
+  as signed longs — a stable order, but not the same as sorting the textual form. Do not
+  rely on it matching `ORDER BY id`.
+- A `record` implementing `TypedString`/`TypedUuid` would be the more idiomatic Java 26
+  alternative, since records cannot extend a class. We chose base classes so the null
+  check, equality and comparison exist once rather than in every primitive. **TODO** —
+  record as an ADR if we keep it past the first few slices.
 
 ## Behaviour, not data
 

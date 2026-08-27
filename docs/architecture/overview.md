@@ -73,7 +73,7 @@ se.financial_tracker
 ├── account      accounts, transactions, valuations        (not built yet)
 ├── goal         goals and progress calculation            (not built yet)
 ├── group        groups, memberships, shared goals         (not built yet)
-└── common       Money, TypedString primitives, shared value objects
+└── common       Money, TypedString/TypedUuid primitives, shared value objects
 ```
 
 Each slice contains `domain`, `commands`, `queries` and `port/{in,out}`. Writes are
