@@ -35,7 +35,8 @@ Java 26. Use the modern constructs where they make code plainer:
 - Booleans read as predicates: `archived`, `isOwnedBy(...)`.
 - No abbreviations (`acc`, `txn`, `val`) and no Hungarian prefixes/suffixes on interfaces
   (`IAccount`, `AccountImpl`).
-- Test methods say the rule in words: `deposit_on_archived_account_is_rejected()`.
+- Test methods say the rule in words: `deposit_on_archived_account_is_rejected()`, and
+  assert with AssertJ (see [testing-strategy.md](testing-strategy.md)).
 
 ## Nulls and Optional
 

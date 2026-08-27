@@ -9,20 +9,21 @@ import java.util.Objects;
  * {@link Comparable} against its own kind only:
  *
  * <pre>{@code
- * public final class UserId extends TypedStringBase<UserId> {
+ * public final class Username extends TypedStringBase<Username> {
  *
- *     private UserId(String value) {
+ *     private Username(String value) {
  *         super(value);
  *     }
  *
- *     public static UserId of(String value) {
- *         return new UserId(value);
+ *     public static Username of(String value) {
+ *         return new Username(value);
  *     }
  * }
  * }</pre>
  *
  * <p>Two instances are equal only when they are of the same concrete class and hold the
- * same value, so a {@code UserId} never equals a {@code GroupId} carrying the same text.
+ * same value, so a {@code Username} never equals a {@code GroupName} carrying the same
+ * text.
  *
  * <p>There is deliberately no {@code static of(String)} here: static methods are not
  * polymorphic in Java, so a factory on the base class cannot know which subtype to build.
@@ -50,12 +51,16 @@ import java.util.Objects;
  *     }
  * }
  * }</pre>
+ *
+ * @param <T> the concrete subtype, so that {@code compareTo} and equality are typed
  */
 public abstract class TypedStringBase<T extends TypedStringBase<T>> implements TypedString, Comparable<T> {
 
     private final String value;
 
     /**
+     * Wraps a value, trimmed and required to be non-blank.
+     *
      * @param value the raw value; trimmed before it is stored
      * @throws IllegalArgumentException if the value is null or blank
      */

@@ -59,13 +59,35 @@ ArchUnit test in `core` covers what the compiler cannot see:
 
 - Given / When / Then structure, separated by blank lines. Comments only where the setup
   is genuinely obscure.
-- One assertion *concept* per test; use AssertJ for readable assertions.
+- One assertion *concept* per test.
+- **AssertJ only.** Every assertion goes through `assertThat(...)`; JUnit's
+  `assertEquals`, `assertTrue` and `assertThrows` are not used, so a test reads one way
+  throughout and the failure messages describe the value, not just the mismatch.
+
+  ```java
+  assertThat(Username.of("  martin  ").value()).isEqualTo("martin");
+  assertThat(SampleId.of(A)).isEqualTo(SampleId.of(A)).hasSameHashCodeAs(SampleId.of(A));
+  assertThat(ids).hasSize(2);
+  assertThat(SampleId.of(A)).isLessThan(SampleId.of(B));
+
+  assertThatExceptionOfType(IllegalArgumentException.class)
+          .isThrownBy(() -> Username.of(""))
+          .withMessageContaining("Username");
+  ```
+
+  Prefer the assertion that states the intent — `hasToString`, `hasSameHashCodeAs`,
+  `isEqualByComparingTo`, `containsExactly` — over unpacking the object and comparing
+  fields yourself.
+
 - Test data via small builders or factory methods (`anAccount().archived()`) that build
   through `create`, so a test states only what matters to it. Never reach for `hydrate` to
   fabricate a state the domain would refuse — if a test needs it, either the rule or the
   test is wrong. Persistence-mapping tests are the exception.
+
 - Tests are deterministic: fixed clock, fixed ids, no `random`, no sleeping.
+
 - A bug fix starts with a failing test that reproduces it.
+
 - **TODO** — decide whether to enforce a coverage threshold in the build, and what to do
   about generated/DTO code if we do.
 

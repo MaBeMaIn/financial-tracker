@@ -64,7 +64,7 @@ se.financial_tracker
 ├── goal
 ├── group
 └── common
-    └── domain                     Money, TypedString primitives, shared value objects
+    └── domain                     Money, TypedString/TypedUuid primitives, shared value objects
 ```
 
 Those slices are packages in the **`core` Maven module**. Adapters live in modules of
