@@ -1,0 +1,9 @@
+# Code owners for financial-tracker.
+#
+# Every pull request touching a matching path automatically requests a review
+# from these owners. Later rules override earlier ones, so keep the catch-all
+# first and add narrower paths below it if ownership ever diverges.
+#
+# Owners must have write access to the repository for the rule to take effect.
+
+*   @main0034 @mariamberg
