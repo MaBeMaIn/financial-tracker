@@ -1,0 +1,44 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs when a PR is pushed to again — saves Actions minutes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Build, test and check formatting
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v5
+        with:
+          java-version: '26'
+          distribution: temurin
+          cache: maven
+
+      - name: Check formatting
+        run: ./mvnw --batch-mode --no-transfer-progress spotless:check
+
+      - name: Build and test
+        run: ./mvnw --batch-mode --no-transfer-progress verify -Dspotless.check.skip=true
+
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: '**/target/surefire-reports/'
+          retention-days: 7
+          if-no-files-found: ignore
