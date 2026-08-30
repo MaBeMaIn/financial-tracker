@@ -44,58 +44,114 @@ class TypedStringBaseTest {
 
     @Test
     void same_type_and_value_are_equal() {
-        assertThat(SampleId.of("abc")).isEqualTo(SampleId.of("abc")).hasSameHashCodeAs(SampleId.of("abc"));
+        // Arrange
+        SampleId id = SampleId.of("abc");
+
+        // Act
+        SampleId sameValue = SampleId.of("abc");
+
+        // Assert
+        assertThat(id).isEqualTo(sameValue).hasSameHashCodeAs(sameValue);
     }
 
     @Test
     void different_types_with_the_same_value_are_not_equal() {
-        assertThat(SampleId.of("abc")).isNotEqualTo(OtherId.of("abc"));
-        assertThat(OtherId.of("abc")).isNotEqualTo(SampleId.of("abc"));
+        // Arrange
+        SampleId sampleId = SampleId.of("abc");
+        OtherId otherId = OtherId.of("abc");
+
+        // Act + Assert
+        assertThat(sampleId).isNotEqualTo(otherId);
+        assertThat(otherId).isNotEqualTo(sampleId);
     }
 
     @Test
     void different_types_do_not_collide_in_a_set() {
-        var ids = Set.of(SampleId.of("abc"), OtherId.of("abc"));
+        // Arrange
+        SampleId sampleId = SampleId.of("abc");
+        OtherId otherId = OtherId.of("abc");
 
+        // Act
+        var ids = Set.of(sampleId, otherId);
+
+        // Assert
         assertThat(ids).hasSize(2);
     }
 
     @Test
     void value_is_trimmed() {
-        assertThat(SampleId.of("  abc  ").value()).isEqualTo("abc");
+        // Arrange
+        String padded = "  abc  ";
+
+        // Act
+        SampleId id = SampleId.of(padded);
+
+        // Assert
+        assertThat(id.value()).isEqualTo("abc");
     }
 
     @Test
     void subtypes_may_normalize_in_their_factory() {
-        assertThat(LowerCased.of(" ABC ").value()).isEqualTo("abc");
-        assertThat(LowerCased.of("ABC")).isEqualTo(LowerCased.of("abc"));
+        // Arrange
+        String upperCased = " ABC ";
+
+        // Act
+        LowerCased normalized = LowerCased.of(upperCased);
+
+        // Assert
+        assertThat(normalized.value()).isEqualTo("abc");
+        assertThat(normalized).isEqualTo(LowerCased.of("abc"));
     }
 
     @Test
     void null_is_rejected() {
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> SampleId.of(null));
+        // Arrange
+        String value = null;
+
+        // Act + Assert
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> SampleId.of(value));
     }
 
     @Test
     void blank_is_rejected() {
-        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> SampleId.of("   "));
+        // Arrange
+        String blank = "   ";
+
+        // Act + Assert
+        assertThatExceptionOfType(IllegalArgumentException.class).isThrownBy(() -> SampleId.of(blank));
     }
 
     @Test
     void the_message_names_the_type() {
+        // Arrange
+        String empty = "";
+
+        // Act + Assert
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> SampleId.of(""))
+                .isThrownBy(() -> SampleId.of(empty))
                 .withMessageContaining("SampleId");
     }
 
     @Test
     void comparison_is_by_value() {
-        assertThat(SampleId.of("a")).isLessThan(SampleId.of("b"));
-        assertThat(SampleId.of("a")).isEqualByComparingTo(SampleId.of("a"));
+        // Arrange
+        SampleId a = SampleId.of("a");
+        SampleId b = SampleId.of("b");
+
+        // Act + Assert
+        assertThat(a).isLessThan(b);
+        assertThat(a).isEqualByComparingTo(SampleId.of("a"));
     }
 
     @Test
     void to_string_is_the_value() {
-        assertThat(SampleId.of("abc")).hasToString("abc");
+        // Arrange
+        SampleId id = SampleId.of("abc");
+
+        // Act
+        String text = id.toString();
+
+        // Assert
+        assertThat(text).isEqualTo("abc");
     }
 }

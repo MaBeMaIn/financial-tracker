@@ -1,5 +1,7 @@
 package se.financial_tracker.user.commands;
 
+import se.financial_tracker.user.domain.User;
+import se.financial_tracker.user.exception.UserException;
 import se.financial_tracker.user.port.out.UserRepository;
 
 public final class CreateUserCommandHandler {
@@ -11,8 +13,12 @@ public final class CreateUserCommandHandler {
     }
 
     public void handle(CreateUserCommand command) {
-        // 1. Check if user already exists
-        // 2. Create User domain object
-        // 3. Persist in repository
+        if (userRepository.exsistsByUsername(command.username())) {
+            throw new UserException("User with username: " + command.username() + " already exists.");
+        }
+
+        User user = User.createUser(command.username(), command.emailAddress());
+
+        userRepository.createUser(user);
     }
 }
