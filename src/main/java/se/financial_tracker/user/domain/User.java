@@ -1,7 +1,5 @@
 package se.financial_tracker.user.domain;
 
-import java.util.UUID;
-
 public final class User {
 
     private final UserId userId;
