@@ -1,7 +1,7 @@
 ---
 status: draft
 owner: martin
-last-updated: 2026-08-21
+last-updated: 2026-08-29
 ---
 
 # Testing strategy
@@ -57,9 +57,36 @@ ArchUnit test in `core` covers what the compiler cannot see:
 
 ## Conventions
 
-- Given / When / Then structure, separated by blank lines. Comments only where the setup
-  is genuinely obscure.
+- Arrange / Act / Assert structure, separated by blank lines, with each phase marked by an
+  `// Arrange`, `// Act` and `// Assert` comment. The comments are part of the convention,
+  not clutter: they make the phase boundaries survive editing, and a test that cannot be
+  split into three named phases is usually testing more than one thing.
+
+  ```java
+  @Test
+  void user_with_an_existing_username_is_rejected() {
+      // Arrange
+      Username username = Username.of("martin");
+      when(repository.exsistsByUsername(username)).thenReturn(true);
+
+      // Act + Assert
+      assertThatThrownBy(() -> commandHandler.handle(command))
+              .isInstanceOf(UserException.class);
+  }
+  ```
+
+  Every test carries them, the one-liners included: a value-object test that fits on a
+  single line is usually hiding its phases inside nested calls, and naming the input and
+  the result in local variables is what makes the three phases visible.
+
+  When the act happens *inside* the assertion and cannot be pulled out — anything built on
+  `assertThatThrownBy` or `assertThatExceptionOfType`, and the equality or comparison
+  checks where the call under test *is* the assertion — the two phases share one `// Act +
+  Assert`. That is the only permitted merge. A test with an empty body (`contextLoads`)
+  has no phases to label.
+
 - One assertion *concept* per test.
+
 - **AssertJ only.** Every assertion goes through `assertThat(...)`; JUnit's
   `assertEquals`, `assertTrue` and `assertThrows` are not used, so a test reads one way
   throughout and the failure messages describe the value, not just the mismatch.
@@ -77,7 +104,8 @@ ArchUnit test in `core` covers what the compiler cannot see:
 
   Prefer the assertion that states the intent — `hasToString`, `hasSameHashCodeAs`,
   `isEqualByComparingTo`, `containsExactly` — over unpacking the object and comparing
-  fields yourself.
+  fields yourself. The snippets above show assertion *style*; inside a real test they
+  still sit under an `// Assert` (or `// Act + Assert`) comment.
 
 - Test data via small builders or factory methods (`anAccount().archived()`) that build
   through `create`, so a test states only what matters to it. Never reach for `hydrate` to
