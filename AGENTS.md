@@ -59,9 +59,9 @@ app                   Spring Boot application, config, wiring    → depends on 
 docs/                 project documentation (see docs/README.md)
 ```
 
-The modules are not created yet; the code is still one module under
-`src/main/java/se/financial_tracker/`. Flyway migrations belong to `adapter-persistence`
-once it exists.
+`core`, `adapter-persistence` and `app` exist; `adapter-web` arrives with the first
+controller. Flyway migrations live in `adapter-persistence`, and handler beans are
+declared in `app` ([ADR-0007](docs/adr/0007-handler-beans-in-configuration-classes.md)).
 
 Each slice is a hexagon:
 
