@@ -198,13 +198,15 @@ Aggregates, value objects, invariants and the `create`/`hydrate` split are cover
 
 - **Constructor injection only.** No `@Autowired` fields, no field or setter injection.
   Domain classes and handlers must be constructible in a test with `new`.
-- **Wire in configuration, not annotations.** Handlers are registered as beans in a Spring
-  `@Configuration` class in the `app` module, since `core` has no Spring on its classpath
-  to annotate them with. (A `@Component` on the handler is the pragmatic alternative.
-  **This decision is postponed** — see [§8](#8-decisions-still-open) — so match the
-  existing slices rather than choosing anew.)
+- **Wire in configuration, not annotations.** Handlers are registered as beans by a
+  `@Configuration` class per slice in the `app` module, named `<Slice>Configuration`, and
+  the bean is typed as the inbound port. `core` has no Spring on its classpath to annotate
+  them with, so `@Component` on a handler is not an option
+  ([ADR-0007](../adr/0007-handler-beans-in-configuration-classes.md)).
 - **Transaction boundary is the handler.** `@Transactional` sits on the handler class.
-  This is the one Spring annotation allowed inward, and it is a conscious trade-off.
+  This is the one Spring annotation allowed inward, and it is a conscious trade-off — one
+  now in tension with the module split, so see [§8](#8-decisions-still-open) before
+  reaching for it.
 - **Immutability by default.** Records for commands, results and value objects. Mutable
   state only inside aggregates, and only where the domain genuinely changes.
 - **Validation twice, for different reasons.** The web adapter rejects malformed input
@@ -238,10 +240,13 @@ Aggregates, value objects, invariants and the `create`/`hydrate` split are cover
 
 ## 8. Decisions still open
 
-- **TODO — bean wiring. Postponed deliberately.** Spring `@Configuration` factories (keeps
-  the inside Spring-free) vs `@Component` on handlers (less ceremony). Until this is
-  decided, follow whatever the existing slices do and do not introduce a third way;
-  revisit once the first few slices exist. Listed under *Postponed* in [../adr/](../adr/).
+- **TODO — the transaction boundary. Postponed deliberately.** §6 puts `@Transactional` on
+  the handler, but that annotation lives in `spring-tx`, and putting it on `core`'s
+  classpath undoes the guarantee
+  [ADR-0005](../adr/0005-adapters-as-separate-maven-modules.md) and
+  [ADR-0007](../adr/0007-handler-beans-in-configuration-classes.md) rest on. Nothing
+  forces the question while a handler performs a single write. Do not add the dependency
+  to `core` without an ADR. Listed under *Postponed* in [../adr/](../adr/).
 - **TODO — read models.** How far to take the CQRS-lite escape hatch in §3 before it needs
   its own structure.
 - **TODO — slice isolation.** Keeping technology out of `core` is settled by

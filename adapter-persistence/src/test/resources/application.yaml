@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:persistence-test;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+
+  jpa:
+    # The point of the slice: run against Flyway's schema, not one Hibernate generated.
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
