@@ -3,6 +3,7 @@ package se.financial_tracker.user.adapter.out.persistence;
 import org.springframework.stereotype.Repository;
 import se.financial_tracker.user.domain.EmailAddress;
 import se.financial_tracker.user.domain.User;
+import se.financial_tracker.user.domain.UserId;
 import se.financial_tracker.user.port.out.UserRepository;
 
 import java.util.Optional;
@@ -30,6 +31,16 @@ public class JpaUserRepository implements UserRepository {
     @Override
     public Optional<User> byEmail(EmailAddress emailAddress) {
         return users.findByEmail(emailAddress.value()).map(UserMapper::toDomain);
+    }
+
+    @Override
+    public Optional<User> byId(UserId id) {
+        return users.findById(id.value()).map(UserMapper::toDomain);
+    }
+
+    @Override
+    public boolean existsById(UserId id) {
+        return users.existsById(id.value());
     }
 
     @Override

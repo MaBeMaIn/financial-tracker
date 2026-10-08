@@ -106,8 +106,9 @@ source of truth.
 ## Money
 
 Amounts are a `Money` value object — `BigDecimal` plus an ISO-4217 currency code — living
-in `common`. Stored as `DECIMAL(19,4)` plus a `CHAR(3)` currency column. Each account has
-one currency; the application never converts between currencies.
+in `common`. Stored as `DECIMAL(19,4)` plus a `CHAR(3)` currency column. v1 is
+single-currency: every amount is SEK, and the application never converts between
+currencies.
 
 ## Not yet decided
 

@@ -35,7 +35,6 @@ erDiagram
         uuid user_id FK
         string name
         string type "SAVINGS | INVESTMENT"
-        string currency "ISO-4217"
         boolean archived
     }
     TRANSACTION {
@@ -90,34 +89,32 @@ factories (`create`), never validated after the fact; see
 **Account**
 
 1. An account belongs to exactly one user and never changes owner.
-2. An account's currency is set at creation and is immutable.
-3. An archived account accepts no new transactions or valuations.
+2. An archived account accepts no new transactions or valuations.
 
 **Transaction**
 
-4. `amount` is strictly positive; direction carries the sign.
-5. A transaction's currency is its account's currency — it is never specified separately.
-6. Transactions may be back-dated, but calculations key on `occurred_on`, never on the
+3. `amount` is strictly positive; direction carries the sign.
+4. Transactions may be back-dated, but calculations key on `occurred_on`, never on the
    creation timestamp.
 
 **Valuation**
 
-7. Valuations exist only on `INVESTMENT` accounts.
-8. At most one valuation per (account, `valued_on`).
-9. `total_value` is zero or positive.
+5. Valuations exist only on `INVESTMENT` accounts.
+6. At most one valuation per (account, `valued_on`).
+7. `total_value` is zero or positive.
 
 **Goal**
 
-10. A goal has exactly one owner: either a user or a group, never both and never neither.
-11. Every account linked to a personal goal is owned by the goal's owner.
-12. Every account linked to a shared goal is owned by a current member of that group.
-13. All accounts linked to one goal share a currency (see requirements §9, question 1).
-14. `end_date`, when set, is after `start_date`.
+8. A goal has exactly one owner: either a user or a group, never both and never neither.
+9. Every account linked to a personal goal is owned by the goal's owner.
+10. Every account linked to a shared goal is owned by a current member of that group.
+11. `end_date`, when set, is after `start_date`.
 
 **Group**
 
-15. A group always has an owner, and the owner is a current member.
-16. A user has at most one active membership (`left_on is null`) per group.
+12. A group always has an owner, and the owner is a current member.
+
+13. A user has at most one active membership (`left_on is null`) per group.
 17. Deleting a group deletes memberships and shared goals, never accounts or transactions.
 
 ## Derived calculations
@@ -137,6 +134,6 @@ None of these are stored.
 ## Deliberate omissions
 
 - No holdings, instruments or prices inside an investment account — only total value.
-- No currency conversion, and therefore no exchange-rate entity.
+- Only one currency (SEK) — no conversion, and therefore no exchange-rate entity.
 - No audit log beyond the entities themselves in v1.
 

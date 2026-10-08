@@ -20,7 +20,7 @@ invariants always hold. Proposed boundaries for this project:
 
 |  Aggregate  |     Root      |               Contains               |                          Why                           |
 |-------------|---------------|--------------------------------------|--------------------------------------------------------|
-| Account     | `Account`     | name, type, currency, archived flag  | Small, always loaded whole                             |
+| Account     | `Account`     | name, type, archived flag            | Small, always loaded whole                             |
 | Transaction | `Transaction` | one entry, references `AccountId`    | Unbounded in number — not held inside `Account`        |
 | Valuation   | `Valuation`   | one snapshot, references `AccountId` | Same reason                                            |
 | Goal        | `Goal`        | target, period, linked account ids   | Linked accounts are references, not owned objects      |
@@ -50,28 +50,27 @@ public final class Account {
     private final AccountId id;
     private final UserId owner;
     private final AccountType type;
-    private final Currency currency;
     private String name;
     private boolean archived;
 
     private Account(AccountId id, UserId owner, AccountType type,
-                    Currency currency, String name, boolean archived) { ... }
+                    String name, boolean archived) { ... }
 
     /** A user opens a new account. Creation-time rules live here. */
     public static Account create(AccountId id, UserId owner, AccountType type,
-                                 Currency currency, String name) {
+                                 String name) {
         requireNonNull(owner, "owner");
         requireText(name, "name");
-        // a new account is never archived, and its currency is fixed from now on
-        return new Account(id, owner, type, currency, name, false);
+        // a new account is never archived
+        return new Account(id, owner, type, name, false);
         // later: record(new AccountOpened(id, owner, type));
     }
 
     /** Reconstitution from stored state. No rules, no events, no defaults. */
     public static Account hydrate(AccountId id, UserId owner, AccountType type,
-                                  Currency currency, String name, boolean archived) {
+                                  String name, boolean archived) {
         // deliberately accepts states create() would reject, e.g. archived == true
-        return new Account(id, owner, type, currency, name, archived);
+        return new Account(id, owner, type, name, archived);
     }
 }
 ```

@@ -4,7 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import se.financial_tracker.user.commands.CreateUserCommandHandler;
 import se.financial_tracker.user.port.in.CreateUser;
+import se.financial_tracker.user.port.in.GetUser;
 import se.financial_tracker.user.port.out.UserRepository;
+import se.financial_tracker.user.queries.GetUserQueryHandler;
 
 /**
  * Handlers are plain Java, so the application module declares them as beans rather than
@@ -16,5 +18,10 @@ class UserConfiguration {
     @Bean
     CreateUser createUser(UserRepository users) {
         return new CreateUserCommandHandler(users);
+    }
+
+    @Bean
+    GetUser getUser(UserRepository users) {
+        return new GetUserQueryHandler(users);
     }
 }
