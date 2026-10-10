@@ -13,8 +13,7 @@ public class AccountMapper {
                 account.accountType(),
                 account.accountName().value(),
                 account.owner().value(),
-                account.isArchived().value()
-                );
+                account.isArchived().value());
     }
 
     static Account toDomain(AccountEntity entity) {
@@ -25,5 +24,4 @@ public class AccountMapper {
                 UserId.of(entity.owner()),
                 Archived.of(entity.archived()));
     }
-
 }

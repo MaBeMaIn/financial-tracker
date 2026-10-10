@@ -10,5 +10,4 @@ public interface AccountRepository {
     Optional<Account> getByAccountId(AccountId id);
 
     Account save(Account account);
-
 }

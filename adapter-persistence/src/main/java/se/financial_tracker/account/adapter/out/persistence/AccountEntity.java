@@ -1,13 +1,13 @@
 package se.financial_tracker.account.adapter.out.persistence;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import se.financial_tracker.account.domain.AccountType;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +18,7 @@ public class AccountEntity {
     @Column(name = "id", nullable = false)
     private UUID accountId;
 
-     @Column(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
     private UUID owner;
 
     @Column(name = "name", nullable = false)
@@ -43,13 +43,23 @@ public class AccountEntity {
         this.archived = archived;
     }
 
-    UUID accountId() {return accountId;}
+    UUID accountId() {
+        return accountId;
+    }
 
-    UUID owner() {return owner;}
+    UUID owner() {
+        return owner;
+    }
 
-    String accountName() {return accountName;}
+    String accountName() {
+        return accountName;
+    }
 
-    AccountType accountType() {return accountType;}
+    AccountType accountType() {
+        return accountType;
+    }
 
-    boolean archived() {return archived;}
+    boolean archived() {
+        return archived;
+    }
 }

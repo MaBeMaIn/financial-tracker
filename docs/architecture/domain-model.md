@@ -115,7 +115,8 @@ factories (`create`), never validated after the fact; see
 12. A group always has an owner, and the owner is a current member.
 
 13. A user has at most one active membership (`left_on is null`) per group.
-17. Deleting a group deletes memberships and shared goals, never accounts or transactions.
+
+14. Deleting a group deletes memberships and shared goals, never accounts or transactions.
 
 ## Derived calculations
 

@@ -30,5 +30,4 @@ public class JpaAccountRepository implements AccountRepository {
         AccountMapper.toDomain(saved);
         return account;
     }
-
 }

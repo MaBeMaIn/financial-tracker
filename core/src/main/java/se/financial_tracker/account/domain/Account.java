@@ -12,7 +12,8 @@ public final class Account {
 
     private Archived archived;
 
-    public Account(AccountId accountId, AccountType accountType, AccountName accountName, UserId owner, Archived archived) {
+    public Account(
+            AccountId accountId, AccountType accountType, AccountName accountName, UserId owner, Archived archived) {
         this.accountId = accountId;
         this.accountType = accountType;
         this.accountName = accountName;

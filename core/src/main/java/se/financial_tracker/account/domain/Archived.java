@@ -8,5 +8,7 @@ public class Archived extends TypedBooleanBase<Archived> {
         super(value);
     }
 
-    public static Archived of(boolean value) {return new Archived(value);}
+    public static Archived of(boolean value) {
+        return new Archived(value);
+    }
 }

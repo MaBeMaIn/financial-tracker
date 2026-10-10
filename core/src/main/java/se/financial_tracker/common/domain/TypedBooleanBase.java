@@ -7,7 +7,7 @@ public class TypedBooleanBase<T extends TypedBooleanBase<T>> implements TypedBoo
     private final Boolean value;
 
     protected TypedBooleanBase(Boolean value) {
-        if(value == null) {
+        if (value == null) {
             throw new IllegalArgumentException(getClass().getSimpleName() + " must not be null");
         }
         this.value = value;
