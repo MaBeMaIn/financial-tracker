@@ -103,6 +103,14 @@ data free of figures that can drift out of sync with the facts they came from. I
 become slow, caching is added deliberately and documented here; the calculation stays the
 source of truth.
 
+## Identifiers
+
+Every aggregate is identified by a typed UUID version 7 — `UserId`, `AccountId` — minted
+by `Uuid7` in `common/domain` when the aggregate is created, and stored as the table's
+primary key in a native `uuid` column. Version 7 is time-ordered, so inserts land at the
+end of the index rather than scattered through it, and no surrogate key is needed
+([ADR-0008](../adr/0008-uuid-version-7-identifiers-generated-in-the-application.md)).
+
 ## Money
 
 Amounts are a `Money` value object — `BigDecimal` plus an ISO-4217 currency code — living

@@ -24,7 +24,7 @@ final class UserMapper {
 
     static User toDomain(UserEntity entity) {
         return User.hydrate(
-                UserId.of(entity.id()),
+                UserId.of(entity.userId()),
                 EmailAddress.of(entity.email()),
                 DisplayName.of(entity.displayName()),
                 PasswordHash.of(entity.passwordHash()));

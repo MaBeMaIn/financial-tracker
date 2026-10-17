@@ -7,6 +7,12 @@ import se.financial_tracker.account.port.out.AccountRepository;
 
 import java.util.Optional;
 
+/**
+ * The outbound port, implemented against JPA. Speaks domain types only.
+ *
+ * <p>Not {@code final}: {@code @Repository} asks Spring to proxy this bean so that persistence
+ * exceptions are translated, and a CGLIB proxy has to subclass it.
+ */
 @Repository
 public class JpaAccountRepository implements AccountRepository {
 
@@ -17,17 +23,12 @@ public class JpaAccountRepository implements AccountRepository {
     }
 
     @Override
-    public Optional<Account> getById(AccountId id) {
-        return accounts.findById(id).map(AccountMapper::toDomain);
+    public Optional<Account> getByAccountId(AccountId id) {
+        return accounts.findById(id.value()).map(AccountMapper::toDomain);
     }
 
     @Override
     public Account save(Account account) {
-        var entity = AccountMapper.toEntity(account);
-
-        var saved = accounts.save(entity);
-
-        AccountMapper.toDomain(saved);
-        return account;
+        return AccountMapper.toDomain(accounts.save(AccountMapper.toEntity(account)));
     }
 }

@@ -1,6 +1,7 @@
 package se.financial_tracker.account.domain;
 
 import se.financial_tracker.common.domain.TypedUuidBase;
+import se.financial_tracker.common.domain.Uuid7;
 
 import java.util.UUID;
 
@@ -10,8 +11,7 @@ public class AccountId extends TypedUuidBase<AccountId> {
     }
 
     public static AccountId newId() {
-        UUID id = UUID.randomUUID();
-        return AccountId.of(id);
+        return AccountId.of(Uuid7.newUuid());
     }
 
     public static AccountId of(UUID value) {

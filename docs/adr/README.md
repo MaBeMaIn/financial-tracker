@@ -14,15 +14,16 @@ available for anyone — human or AI — who asks "why is it like this?".
 
 Copy [0000-template.md](0000-template.md) to start one.
 
-|                                 #                                 |                       Decision                       |  Status  |
-|-------------------------------------------------------------------|------------------------------------------------------|----------|
-| [0001](0001-hexagonal-architecture-with-use-case-slices.md)       | Hexagonal architecture with use-case slices          | Accepted |
-| [0002](0002-domain-free-of-jpa-annotations.md)                    | The domain stays free of JPA annotations             | Accepted |
-| [0003](0003-split-aggregate-creation-into-create-and-hydrate.md)  | Split aggregate creation into `create` and `hydrate` | Accepted |
-| [0004](0004-command-and-query-handlers-behind-inbound-ports.md)   | Command and query handlers behind inbound ports      | Accepted |
-| [0005](0005-adapters-as-separate-maven-modules.md)                | Adapters live in separate Maven modules              | Accepted |
-| [0006](0006-formatting-with-spotless-and-palantir-java-format.md) | Formatting with Spotless and palantir-java-format    | Accepted |
-| [0007](0007-handler-beans-in-configuration-classes.md)            | Handler beans are wired in `@Configuration` classes  | Accepted |
+|                                    #                                    |                         Decision                         |  Status  |
+|-------------------------------------------------------------------------|----------------------------------------------------------|----------|
+| [0001](0001-hexagonal-architecture-with-use-case-slices.md)             | Hexagonal architecture with use-case slices              | Accepted |
+| [0002](0002-domain-free-of-jpa-annotations.md)                          | The domain stays free of JPA annotations                 | Accepted |
+| [0003](0003-split-aggregate-creation-into-create-and-hydrate.md)        | Split aggregate creation into `create` and `hydrate`     | Accepted |
+| [0004](0004-command-and-query-handlers-behind-inbound-ports.md)         | Command and query handlers behind inbound ports          | Accepted |
+| [0005](0005-adapters-as-separate-maven-modules.md)                      | Adapters live in separate Maven modules                  | Accepted |
+| [0006](0006-formatting-with-spotless-and-palantir-java-format.md)       | Formatting with Spotless and palantir-java-format        | Accepted |
+| [0007](0007-handler-beans-in-configuration-classes.md)                  | Handler beans are wired in `@Configuration` classes      | Accepted |
+| [0008](0008-uuid-version-7-identifiers-generated-in-the-application.md) | UUID version 7 identifiers, generated in the application | Accepted |
 
 ## Postponed
 

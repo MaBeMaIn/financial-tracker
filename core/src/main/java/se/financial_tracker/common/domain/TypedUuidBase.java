@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  *     // a brand new identifier, for User.create(...)
  *     public static UserId newId() {
- *         return new UserId(UUID.randomUUID());
+ *         return new UserId(Uuid7.newUuid());
  *     }
  *
  *     // an identifier that already exists, from storage or a request
@@ -50,12 +50,21 @@ public abstract class TypedUuidBase<T extends TypedUuidBase<T>> implements Typed
     /**
      * Wraps an identifier that must already exist.
      *
+     * <p>Only version 7 is accepted, for every subtype and on every path — a new identifier, one
+     * read back from storage, one parsed from a request. Identifiers are time-ordered by
+     * construction in this project ({@link Uuid7}), and a value that is not version 7 did not come
+     * from here, so it is refused rather than quietly stored.
+     *
      * @param value the identifier this primitive wraps
-     * @throws IllegalArgumentException if the value is null
+     * @throws IllegalArgumentException if the value is null or is not a UUID version 7
      */
     protected TypedUuidBase(UUID value) {
         if (value == null) {
             throw new IllegalArgumentException(getClass().getSimpleName() + " must not be null");
+        }
+        if (!Uuid7.isUuid7(value)) {
+            throw new IllegalArgumentException(getClass().getSimpleName() + " must be a UUID version 7, but " + value
+                    + " is version " + value.version());
         }
         this.value = value;
     }

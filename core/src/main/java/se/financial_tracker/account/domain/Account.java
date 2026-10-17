@@ -10,10 +10,10 @@ public final class Account {
 
     private final UserId owner;
 
-    private Archived archived;
+    private boolean archived;
 
     public Account(
-            AccountId accountId, AccountType accountType, AccountName accountName, UserId owner, Archived archived) {
+            AccountId accountId, AccountType accountType, AccountName accountName, UserId owner, boolean archived) {
         this.accountId = accountId;
         this.accountType = accountType;
         this.accountName = accountName;
@@ -22,16 +22,16 @@ public final class Account {
     }
 
     public static Account createAccount(AccountType type, AccountName accountName, UserId owner) {
-        return new Account(AccountId.newId(), type, accountName, owner, Archived.of(false));
+        return new Account(AccountId.newId(), type, accountName, owner, false);
     }
 
     public static Account hydrate(
-            AccountId accountId, AccountType accountType, AccountName accountName, UserId owner, Archived archived) {
+            AccountId accountId, AccountType accountType, AccountName accountName, UserId owner, boolean archived) {
         return new Account(accountId, accountType, accountName, owner, archived);
     }
 
     public void archiveAccount(Account account) {
-        account.archived = Archived.of(true);
+        account.archived = true;
     }
 
     public AccountId accountId() {
@@ -50,7 +50,7 @@ public final class Account {
         return owner;
     }
 
-    public Archived isArchived() {
+    public boolean isArchived() {
         return archived;
     }
 }
