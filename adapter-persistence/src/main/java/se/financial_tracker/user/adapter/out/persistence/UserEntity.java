@@ -1,5 +1,7 @@
 package se.financial_tracker.user.adapter.out.persistence;
 
+import se.financial_tracker.common.persistence.MutableEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,11 +14,11 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "users")
-class UserEntity {
+class UserEntity extends MutableEntity {
 
     @Id
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private UUID userId;
 
     @Column(name = "email", nullable = false, length = 320)
     private String email;
@@ -31,15 +33,25 @@ class UserEntity {
         // for Hibernate
     }
 
-    UserEntity(UUID id, String email, String displayName, String passwordHash) {
-        this.id = id;
+    UserEntity(UUID userId, String email, String displayName, String passwordHash) {
+        this.userId = userId;
         this.email = email;
         this.displayName = displayName;
         this.passwordHash = passwordHash;
     }
 
-    UUID id() {
-        return id;
+    /**
+     * Copies the mutable state of a user onto the row that already holds it. The repository
+     * updates in place rather than merging a detached instance, whose audit columns are null.
+     */
+    void update(String email, String displayName, String passwordHash) {
+        this.email = email;
+        this.displayName = displayName;
+        this.passwordHash = passwordHash;
+    }
+
+    UUID userId() {
+        return userId;
     }
 
     String email() {

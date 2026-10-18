@@ -35,7 +35,6 @@ and they are tracked differently.
 
 - **FR-3.1** A user can create, rename, archive and delete financial accounts.
 - **FR-3.2** Each financial account has a **type**: `SAVINGS` or `INVESTMENT`.
-- **FR-3.3** Each financial account has a single currency (ISO-4217), set at creation.
 - **FR-3.4** An account belongs to exactly one user. Accounts are never shared or merged.
 - **FR-3.5** Archived accounts remain visible in history but cannot receive new entries.
 
@@ -121,8 +120,6 @@ deliberately deferred; see [§8](#8-out-of-scope-for-the-first-version).
   plus latest investment valuations) and progress on active goals.
 - **FR-6.2** A user can see the history of an account over a chosen period: derived
   balance over time for savings, valuations plus contributions for investments.
-- **FR-6.3** Totals combining accounts in different currencies must not be shown as a
-  single number in v1; group by currency instead.
 
 ## 7. Non-functional requirements
 
@@ -147,16 +144,15 @@ deliberately deferred; see [§8](#8-out-of-scope-for-the-first-version).
 
 - Moving money, connecting to banks, importing statements
 - Goal types other than recurring contribution
-- Multi-currency conversion and FX rates
+- Multiple currencies, conversion and FX rates — v1 is SEK only
 - Per-holding tracking inside an investment account (only total value is tracked)
 - Notifications, reminders, mobile apps, data export
 - Roles beyond user / group owner
 
 ## 9. Open questions
 
-1. Should a goal be allowed to span accounts in different currencies? (Proposal: no.)
-2. When a member leaves a group, should other members keep seeing their historical
+1. When a member leaves a group, should other members keep seeing their historical
    transactions, or only the aggregate contribution?
-3. Is a period strictly a calendar month, or a rolling period from the goal start date?
-4. Should archived accounts still count toward dashboard totals?
+2. Is a period strictly a calendar month, or a rolling period from the goal start date?
+3. Should archived accounts still count toward dashboard totals?
 

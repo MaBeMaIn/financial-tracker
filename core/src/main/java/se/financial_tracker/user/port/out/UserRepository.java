@@ -2,6 +2,7 @@ package se.financial_tracker.user.port.out;
 
 import se.financial_tracker.user.domain.EmailAddress;
 import se.financial_tracker.user.domain.User;
+import se.financial_tracker.user.domain.UserId;
 
 import java.util.Optional;
 
@@ -11,6 +12,10 @@ public interface UserRepository {
     User save(User user);
 
     Optional<User> byEmail(EmailAddress emailAddress);
+
+    Optional<User> byId(UserId id);
+
+    boolean existsById(UserId id);
 
     boolean existsByEmail(EmailAddress emailAddress);
 }

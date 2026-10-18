@@ -52,6 +52,10 @@ Java 26. Use the modern constructs where they make code plainer:
 - Comparison uses `compareTo`, never `equals`, on `BigDecimal`.
 - Dates a user chose are `LocalDate` and mean a calendar day in the user's terms;
   timestamps the system generated are `Instant` in UTC.
+- Identifiers are UUID version 7, minted by `Uuid7` in the application and used as the
+  primary key. `TypedUuidBase` refuses any other version, so test fixtures need real
+  version 7 values
+  ([ADR-0008](../adr/0008-uuid-version-7-identifiers-generated-in-the-application.md)).
 - Current time comes from an injected clock port, never `LocalDate.now()`.
 
 ## Errors
