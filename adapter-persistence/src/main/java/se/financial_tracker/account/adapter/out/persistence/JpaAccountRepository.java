@@ -29,6 +29,13 @@ public class JpaAccountRepository implements AccountRepository {
 
     @Override
     public Account save(Account account) {
-        return AccountMapper.toDomain(accounts.save(AccountMapper.toEntity(account)));
+        AccountEntity entity = accounts.findById(account.accountId().value())
+                .map(existing -> {
+                    existing.update(account.accountName().value(), account.isArchived());
+                    return existing;
+                })
+                .orElseGet(() -> AccountMapper.toEntity(account));
+
+        return AccountMapper.toDomain(accounts.save(entity));
     }
 }

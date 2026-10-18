@@ -40,6 +40,16 @@ class UserEntity extends MutableEntity {
         this.passwordHash = passwordHash;
     }
 
+    /**
+     * Copies the mutable state of a user onto the row that already holds it. The repository
+     * updates in place rather than merging a detached instance, whose audit columns are null.
+     */
+    void update(String email, String displayName, String passwordHash) {
+        this.email = email;
+        this.displayName = displayName;
+        this.passwordHash = passwordHash;
+    }
+
     UUID userId() {
         return userId;
     }

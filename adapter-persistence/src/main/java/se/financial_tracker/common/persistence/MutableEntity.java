@@ -7,7 +7,10 @@ import jakarta.persistence.PreUpdate;
 import java.time.Instant;
 
 /**
- * The audit columns every stored row carries. The primary key is not here: each entity's key is
+ * The audit columns every stored row carries. An entity mapped fresh from the domain has both
+ * fields null, so a repository must copy the domain's state onto the row it already has rather
+ * than merge a detached instance over it — a merge would carry that null {@code createdAt} into
+ * the update and fail the not-null check. The primary key is not here: each entity's key is
  * the domain's own identifier, a UUID version 7 assigned when the aggregate is created, so there
  * is nothing for a base class to generate.
  *
@@ -17,7 +20,7 @@ import java.time.Instant;
 @MappedSuperclass
 public abstract class MutableEntity {
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
     @Column(name = "updated_at", nullable = false)

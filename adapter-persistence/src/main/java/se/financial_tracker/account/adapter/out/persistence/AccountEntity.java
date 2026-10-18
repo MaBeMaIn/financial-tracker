@@ -48,6 +48,16 @@ public class AccountEntity extends MutableEntity {
         this.archived = archived;
     }
 
+    /**
+     * Copies the mutable state of an account onto the row that already holds it, so that saving
+     * an account twice updates it instead of merging a detached instance with null audit columns
+     * over it. The identifier, the owner and the type never change, so they are not touched.
+     */
+    void update(String accountName, boolean archived) {
+        this.accountName = accountName;
+        this.archived = archived;
+    }
+
     UUID accountId() {
         return accountId;
     }

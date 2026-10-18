@@ -25,7 +25,17 @@ public class JpaUserRepository implements UserRepository {
 
     @Override
     public User save(User user) {
-        return UserMapper.toDomain(users.save(UserMapper.toEntity(user)));
+        UserEntity entity = users.findById(user.userId().value())
+                .map(existing -> {
+                    existing.update(
+                            user.emailAddress().value(),
+                            user.displayName().value(),
+                            user.passwordHash().value());
+                    return existing;
+                })
+                .orElseGet(() -> UserMapper.toEntity(user));
+
+        return UserMapper.toDomain(users.save(entity));
     }
 
     @Override
