@@ -1,0 +1,12 @@
+# The "local" profile: everything in memory, nothing kept.
+#
+#   ./mvnw spring-boot:run -Dspring-boot.run.profiles=local
+#
+# Values here override application.yaml, which stores the data in ./data as a file. Use this
+# profile to try things out against a schema Flyway rebuilds from scratch on every start —
+# a migration edited while developing it is reapplied here without a checksum complaint.
+spring:
+  datasource:
+    url: jdbc:h2:mem:financial-tracker;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
