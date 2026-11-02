@@ -5,6 +5,8 @@ import se.financial_tracker.account.domain.AccountId;
 import se.financial_tracker.account.domain.AccountName;
 import se.financial_tracker.user.domain.UserId;
 
+import java.util.List;
+
 /** Translates between the two models by hand, so the reconciliation stays visible (ADR-0002). */
 final class AccountMapper {
 
@@ -19,12 +21,13 @@ final class AccountMapper {
                 account.isArchived());
     }
 
-    static Account toDomain(AccountEntity entity) {
+    static Account toDomain(AccountEntity entity, List<TransactionEntity> transactions) {
         return Account.hydrate(
                 AccountId.of(entity.accountId()),
                 entity.accountType(),
                 AccountName.of(entity.accountName()),
                 UserId.of(entity.owner()),
-                entity.archived());
+                entity.archived(),
+                transactions.stream().map(TransactionMapper::toDomain).toList());
     }
 }

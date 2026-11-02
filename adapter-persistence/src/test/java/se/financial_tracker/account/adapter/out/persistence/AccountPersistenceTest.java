@@ -10,6 +10,10 @@ import se.financial_tracker.account.domain.Account;
 import se.financial_tracker.account.domain.AccountId;
 import se.financial_tracker.account.domain.AccountName;
 import se.financial_tracker.account.domain.AccountType;
+import se.financial_tracker.account.domain.Amount;
+import se.financial_tracker.account.domain.Direction;
+import se.financial_tracker.account.domain.Note;
+import se.financial_tracker.account.domain.Transaction;
 import se.financial_tracker.account.port.out.AccountRepository;
 import se.financial_tracker.user.adapter.out.persistence.JpaUserRepository;
 import se.financial_tracker.user.domain.DisplayName;
@@ -22,6 +26,7 @@ import se.financial_tracker.user.port.out.UserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
@@ -157,6 +162,53 @@ class AccountPersistenceTest {
                     entityManager.flush();
                 })
                 .isInstanceOfAny(PersistenceException.class, DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void deposits_are_stored_and_loaded_with_their_account() {
+        // Arrange
+        Account account = Account.createAccount(AccountType.SAVINGS, AccountName.of("Buffer"), anOwner());
+        accounts.save(account);
+        entityManager.flush();
+        Transaction later = account.deposit(Amount.of("200.50"), LocalDate.of(2026, 10, 15), Note.of("Salary"));
+        Transaction earlier = account.deposit(Amount.of("100"), LocalDate.of(2026, 9, 1), null);
+
+        // Act
+        accounts.save(account);
+        entityManager.flush();
+        entityManager.clear();
+
+        // Assert
+        assertThat(accounts.getByAccountId(account.accountId()))
+                .get()
+                .extracting(Account::transactions)
+                .satisfies(found -> {
+                    assertThat(found).extracting(Transaction::id).containsExactly(earlier.id(), later.id());
+                    assertThat(found.get(0).amount()).isEqualTo(Amount.of("100.00"));
+                    assertThat(found.get(0).note()).isEmpty();
+                    assertThat(found.get(1).note()).contains(Note.of("Salary"));
+                    assertThat(found).extracting(Transaction::direction).containsOnly(Direction.DEPOSIT);
+                });
+    }
+
+    @Test
+    void saving_an_account_twice_does_not_duplicate_its_transactions() {
+        // Arrange
+        Account account = Account.createAccount(AccountType.SAVINGS, AccountName.of("Buffer"), anOwner());
+        account.deposit(Amount.of("50"), LocalDate.of(2026, 10, 1), null);
+        accounts.save(account);
+        entityManager.flush();
+
+        // Act
+        accounts.save(account);
+        entityManager.flush();
+
+        // Assert
+        Object count = entityManager
+                .createNativeQuery("select count(*) from transactions where account_id = :id")
+                .setParameter("id", account.accountId().value())
+                .getSingleResult();
+        assertThat(((Number) count).longValue()).isEqualTo(1);
     }
 
     private UserId anOwner() {
