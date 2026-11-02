@@ -93,6 +93,10 @@ factories (`create`), never validated after the fact; see
 
 **Transaction**
 
+Transactions belong to the account aggregate and are recorded only through it, but are
+stored in their own table
+([ADR-0009](../adr/0009-account-aggregate-owns-its-transactions.md)).
+
 3. `amount` is strictly positive; direction carries the sign.
 4. Transactions may be back-dated, but calculations key on `occurred_on`, never on the
    creation timestamp.
